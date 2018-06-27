@@ -1,4 +1,4 @@
-# Simple Pod for testing Openshift storage performance
+# Simple Pod for testing OpenShift performance
 
 ## BUILD
 
