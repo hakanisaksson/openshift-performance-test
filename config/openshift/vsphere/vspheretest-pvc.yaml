@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: vspheretest-pvc
+    annotations:
+      volume.beta.kubernetes.io/storage-class: vsphere-dyn
+  spec:
+    accessModes:
+      - ReadWriteOnce
+    persistentVolumeReclaimPolicy: Delete
+    resources:
+      requests:
+        storage: 5Gi

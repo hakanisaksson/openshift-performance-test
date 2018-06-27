@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: perftest-gluster-pvc
+    annotations:
+      volume.beta.kubernetes.io/storage-class: gluster-dyn
+  spec:
+    accessModes:
+      - ReadWriteMany
+    persistentVolumeReclaimPolicy: Delete
+    resources:
+      requests:
+        storage: 5Gi

@@ -1,0 +1,81 @@
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: nfstest
+  spec:
+    to:
+      kind: Service
+      name: nfstest
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: nfstest
+  spec:
+    ports:
+    - port: 8080
+      targetPort: 8080
+    selector:
+      name: nfstest
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    name: nfstest
+  spec:
+    template:
+      metadata:
+        labels:
+          name: nfstest
+      spec:
+        containers:
+          - name: nfstest
+            image: "${image}"
+            env:
+            - name: TESTIO
+              value: "1"
+            - name: TESTFIO
+              value: "1"
+            - name: TESTCPU
+              value: "1"
+            - name: TESTMEM
+              value: "1"
+            - name: MAXTIME
+              value: "120"
+            - name: SIZE_GB
+              value: "1"
+            - name: WORKDIR
+              value: "/app/web/mnt"
+            - name: IMAGE
+              value: "${image}"
+            ports:
+              - containerPort: 8080
+                protocol: TCP
+            readinessProbe:
+              httpGet:
+                path: /health/
+                port: 8080
+              initialDelaySeconds: 5
+              periodSeconds: 21
+            livenessProbe:
+              httpGet:
+                path: /ping/
+                port: 8080
+              initialDelaySeconds: 10
+              failureThreshold: 5
+              periodSeconds: 19
+              timeoutSeconds: 5
+            volumeMounts:
+              - mountPath: /app/web/mnt
+                name: nfstest-pv
+        volumes:
+            - name: nfstest-pv
+              persistentVolumeClaim:
+                claimName: nfstest-pvc
+    replicas: 1
+    strategy:
+      type: Rolling
+    paused: false
+    revisionHistoryLimit: 2
+    minReadySeconds: 0

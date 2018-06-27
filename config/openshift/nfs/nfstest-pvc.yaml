@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: nfstest-pvc
+  spec:
+    accessModes:
+      - ReadWriteMany
+    persistentVolumeReclaimPolicy: Delete
+    resources:
+      requests:
+        storage: 5Gi
